@@ -7,6 +7,20 @@ require_role('donor');
 $baseUrl = '/FoodBridge';
 $donorId = (int) $_SESSION['user_id'];
 
+// Unverified donors cannot post food (admin approves donors in Verify Donors).
+$stmt = $pdo->prepare('SELECT is_verified FROM users WHERE id = ?');
+$stmt->execute([$donorId]);
+if (!(int) $stmt->fetchColumn()) {
+    $pageTitle = 'Add Food Donation';
+    include __DIR__ . '/../includes/header.php';
+    echo '<div class="alert alert-warning" role="alert">'
+        . '<strong>Your donor account is not verified yet.</strong> '
+        . 'An admin must approve your account before you can post food. Please check back later.'
+        . '</div>';
+    include __DIR__ . '/../includes/footer.php';
+    exit;
+}
+
 $categories = ['Cooked Food', 'Bakery', 'Raw Food', 'Fruits & Vegetables', 'Packaged Food', 'Beverages', 'Other'];
 $units      = ['pcs', 'packs', 'kg', 'litres', 'boxes', 'servings'];
 
