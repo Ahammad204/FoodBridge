@@ -1,0 +1,10 @@
+/* FoodBridge — custom styles (Bootstrap 5 does the heavy lifting) */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.card-donation img {
+    object-fit: cover;
+    height: 180px;
+}
