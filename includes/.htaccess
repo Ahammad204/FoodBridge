@@ -1,0 +1,2 @@
+# Block direct web access to includes (header/footer/navbar are include-only).
+Require all denied

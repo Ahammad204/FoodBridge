@@ -1,0 +1,6 @@
+# Uploads are images only — never let an uploaded file run as code.
+<FilesMatch "\.(php|phtml|php\d|phar|cgi|pl|asp|aspx|shtml)$">
+    Require all denied
+</FilesMatch>
+Options -ExecCGI
+php_admin_flag engine off

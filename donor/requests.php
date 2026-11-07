@@ -4,6 +4,7 @@
 // 'requested' and every other pending request for it is rejected.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/auth_check.php';
+require_once __DIR__ . '/../includes/notify.php';
 require_role('donor');
 
 $baseUrl = '/FoodBridge';
@@ -29,8 +30,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($action === 'reject') {
         $upd = $pdo->prepare("UPDATE food_requests SET status = 'rejected' WHERE id = ?");
         $upd->execute([$requestId]);
+
+        notify_user(
+            $pdo,
+            (int) $request['receiver_id'],
+            'request_rejected',
+            'Your request for "' . $request['donation_title'] . '" was rejected by the donor.',
+            '/FoodBridge/receiver/my_requests.php'
+        );
+
         flash_set('success', 'Request rejected.');
     } elseif ($action === 'accept') {
+        // Remember who else is pending — they get auto-rejected + notified.
+        $othersStmt = $pdo->prepare(
+            "SELECT receiver_id FROM food_requests
+             WHERE donation_id = ? AND id <> ? AND status = 'pending'"
+        );
+        $othersStmt->execute([$request['donation_id'], $requestId]);
+        $otherReceiverIds = $othersStmt->fetchAll(PDO::FETCH_COLUMN);
+
         $pdo->beginTransaction();
         try {
             // 1) Accept this request.
@@ -48,6 +66,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             )->execute([$request['donation_id'], $requestId]);
 
             $pdo->commit();
+
+            // Notify the winner and everyone who was auto-rejected.
+            notify_user(
+                $pdo,
+                (int) $request['receiver_id'],
+                'request_accepted',
+                'Your request for "' . $request['donation_title'] . '" was accepted. Please arrange the pickup.',
+                '/FoodBridge/receiver/my_requests.php'
+            );
+            foreach ($otherReceiverIds as $otherId) {
+                notify_user(
+                    $pdo,
+                    (int) $otherId,
+                    'request_rejected',
+                    'Your request for "' . $request['donation_title'] . '" was rejected — the donor accepted another request.',
+                    '/FoodBridge/receiver/my_requests.php'
+                );
+            }
+
             flash_set('success', 'Request accepted. The donation is marked as requested, and other pending requests for it were rejected.');
         } catch (Throwable $e) {
             $pdo->rollBack();

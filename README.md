@@ -20,6 +20,11 @@ so surplus food reaches people who need it instead of going to waste.
 Database connection settings live in `config/db.php`
 (XAMPP defaults: host `localhost`, user `root`, empty password, database `foodbridge`).
 
+## Updating an existing install
+
+If you imported an older `database.sql` before notifications existed, run
+`sql_update_notifications.sql` once in phpMyAdmin to add the `notifications` table.
+
 ## Default accounts (from database.sql sample data)
 
 | Role     | Email                    | Password      |

@@ -41,10 +41,53 @@ $dashboardUrl = match ($role) {
             </ul>
             <ul class="navbar-nav align-items-lg-center">
                 <?php if ($isLoggedIn): ?>
+                    <?php
+                    // Notification bell (only where a DB connection exists).
+                    $notifCount = 0;
+                    $notifLatest = [];
+                    if (isset($pdo)) {
+                        require_once __DIR__ . '/notify.php';
+                        try {
+                            $notifCount  = unread_notification_count($pdo, (int) $_SESSION['user_id']);
+                            $notifLatest = latest_notifications($pdo, (int) $_SESSION['user_id'], 5);
+                        } catch (Throwable $e) {
+                            $notifCount = 0;
+                            $notifLatest = [];
+                        }
+                    }
+                    ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                            &#128276;
+                            <?php if ($notifCount > 0): ?>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><?= $notifCount ?></span>
+                            <?php endif; ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="min-width: 320px;">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            <?php if (!$notifLatest): ?>
+                                <li><span class="dropdown-item-text text-muted small">No notifications yet.</span></li>
+                            <?php endif; ?>
+                            <?php foreach ($notifLatest as $n): ?>
+                                <li>
+                                    <a class="dropdown-item small <?= $n['is_read'] ? '' : 'fw-bold' ?>"
+                                       href="<?= $baseUrl ?>/notifications.php?go=<?= (int) $n['id'] ?>">
+                                        <?= htmlspecialchars($n['message'], ENT_QUOTES, 'UTF-8') ?>
+                                        <span class="d-block text-muted" style="font-size: 0.75rem;"><?= htmlspecialchars($n['created_at'], ENT_QUOTES, 'UTF-8') ?></span>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item small text-center" href="<?= $baseUrl ?>/notifications.php">View all notifications</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <span class="nav-link text-white-50">Hello, <?= htmlspecialchars($userName, ENT_QUOTES, 'UTF-8') ?>
                             <span class="badge bg-warning text-dark text-capitalize"><?= htmlspecialchars((string) $role, ENT_QUOTES, 'UTF-8') ?></span>
                         </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $baseUrl ?>/profile.php">Profile</a>
                     </li>
                     <li class="nav-item ms-lg-2">
                         <a class="btn btn-outline-light btn-sm" href="<?= $baseUrl ?>/auth/logout.php">Logout</a>

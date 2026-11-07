@@ -1,0 +1,2 @@
+# Block direct web access to the config folder (db.php is include-only).
+Require all denied

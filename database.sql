@@ -64,6 +64,22 @@ CREATE TABLE IF NOT EXISTS food_requests (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
+-- ------------------------------------------------------------
+-- notifications
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS notifications (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT UNSIGNED NOT NULL,
+    type       VARCHAR(50)  NOT NULL,   -- new_request, request_accepted, request_rejected, request_completed
+    message    VARCHAR(255) NOT NULL,
+    link       VARCHAR(255) NULL,       -- where the bell click should go
+    is_read    TINYINT(1)   NOT NULL DEFAULT 0,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_notifications_user
+        FOREIGN KEY (user_id) REFERENCES users (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 -- ============================================================
 -- Default admin account
 -- Email: admin@foodbridge.local  |  Password: Admin@123

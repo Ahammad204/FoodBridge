@@ -2,6 +2,7 @@
 // FoodBridge — receiver: food details + Send Request (no duplicate requests)
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/auth_check.php';
+require_once __DIR__ . '/../includes/notify.php';
 require_role('receiver');
 
 $baseUrl = '/FoodBridge';
@@ -56,6 +57,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              VALUES (?, ?, ?, ?)'
         );
         $stmt->execute([$id, $receiverId, $message !== '' ? $message : null, 'pending']);
+
+        // Notify the donor about the new request.
+        notify_user(
+            $pdo,
+            (int) $donation['donor_id'],
+            'new_request',
+            ($_SESSION['name'] ?? 'A receiver') . ' requested your donation "' . $donation['title'] . '".',
+            '/FoodBridge/donor/requests.php'
+        );
 
         flash_set('success', 'Request sent. The donor will review it — track the status in My Requests.');
         header('Location: ' . $baseUrl . '/receiver/my_requests.php');

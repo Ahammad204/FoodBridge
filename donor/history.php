@@ -4,6 +4,7 @@
 // Below: completed donations history.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/auth_check.php';
+require_once __DIR__ . '/../includes/notify.php';
 require_role('donor');
 
 $baseUrl = '/FoodBridge';
@@ -20,6 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'compl
     $stmt->execute([$donationId, $donorId]);
 
     if ($stmt->fetch()) {
+        // Who receives it? (for the completion notification)
+        $infoStmt = $pdo->prepare(
+            "SELECT fd.title, fr.receiver_id
+             FROM food_donations fd
+             JOIN food_requests fr ON fr.donation_id = fd.id AND fr.status = 'accepted'
+             WHERE fd.id = ?"
+        );
+        $infoStmt->execute([$donationId]);
+        $info = $infoStmt->fetch();
+
         $pdo->beginTransaction();
         try {
             $pdo->prepare("UPDATE food_donations SET status = 'completed' WHERE id = ?")
@@ -29,6 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'compl
                  WHERE donation_id = ? AND status = 'accepted'"
             )->execute([$donationId]);
             $pdo->commit();
+
+            if ($info) {
+                notify_user(
+                    $pdo,
+                    (int) $info['receiver_id'],
+                    'request_completed',
+                    'Your pickup of "' . $info['title'] . '" was marked as completed. Thank you!',
+                    '/FoodBridge/receiver/history.php'
+                );
+            }
+
             flash_set('success', 'Marked as completed. Thank you for sharing!');
         } catch (Throwable $e) {
             $pdo->rollBack();

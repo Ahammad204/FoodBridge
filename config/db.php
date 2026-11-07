@@ -21,3 +21,17 @@ try {
 } catch (PDOException $e) {
     die('Database connection failed: ' . $e->getMessage());
 }
+
+// ---- Auto-expire donations ----
+// Any donation still 'available' whose expiry_time has passed becomes
+// 'expired'. Runs once per page load (cheap single UPDATE).
+// Donations already 'requested' (promised to a receiver) are left alone so
+// an accepted pickup can still be completed.
+try {
+    $pdo->exec(
+        "UPDATE food_donations SET status = 'expired'
+         WHERE status = 'available' AND expiry_time <= NOW()"
+    );
+} catch (PDOException $e) {
+    // Table may not exist yet (before database.sql is imported) — ignore.
+}

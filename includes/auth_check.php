@@ -6,6 +6,11 @@
 //   require_role('admin');      // only a specific role
 
 if (session_status() === PHP_SESSION_NONE) {
+    // Hardened session cookie: not readable by JavaScript, Lax same-site.
+    session_set_cookie_params([
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
     session_start();
 }
 
