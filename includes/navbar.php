@@ -15,11 +15,11 @@ $role = $_SESSION['role'] ?? null;
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/index.php">Home</a></li>
                 <?php if ($isLoggedIn && $role === 'admin'): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/admin/index.php">Admin Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/admin/dashboard.php">Admin Dashboard</a></li>
                 <?php elseif ($isLoggedIn && $role === 'donor'): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/donor/index.php">Donor Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/donor/dashboard.php">Donor Dashboard</a></li>
                 <?php elseif ($isLoggedIn && $role === 'receiver'): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/receiver/index.php">Receiver Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/receiver/dashboard.php">Receiver Dashboard</a></li>
                 <?php endif; ?>
             </ul>
             <ul class="navbar-nav">
