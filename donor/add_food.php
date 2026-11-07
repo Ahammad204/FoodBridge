@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role('donor');
 
-$baseUrl = '/FoodBridge';
+$baseUrl = BASE_URL;
 $donorId = (int) $_SESSION['user_id'];
 
 // Unverified donors cannot post food (admin approves donors in Verify Donors).

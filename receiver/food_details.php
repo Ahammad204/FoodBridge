@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../includes/notify.php';
 require_role('receiver');
 
-$baseUrl = '/FoodBridge';
+$baseUrl = BASE_URL;
 $receiverId = (int) $_SESSION['user_id'];
 $id = (int) ($_GET['id'] ?? 0);
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (int) $donation['donor_id'],
             'new_request',
             ($_SESSION['name'] ?? 'A receiver') . ' requested your donation "' . $donation['title'] . '".',
-            '/FoodBridge/donor/requests.php'
+            '/donor/requests.php'
         );
 
         flash_set('success', 'Request sent. The donor will review it — track the status in My Requests.');

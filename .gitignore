@@ -1,0 +1,2 @@
+# FoodBridge — files that must never be committed (real credentials live here)
+config/config.production.php

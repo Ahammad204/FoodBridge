@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$baseUrl = BASE_URL;
 include __DIR__ . '/includes/header.php';
-$baseUrl = '/FoodBridge';
 ?>
 
 <h1 class="fb-section-title mb-4">Contact us</h1>

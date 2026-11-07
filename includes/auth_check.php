@@ -5,6 +5,8 @@
 //   require_login();            // any logged-in user
 //   require_role('admin');      // only a specific role
 
+require_once __DIR__ . '/../config/app.php'; // defines BASE_URL + FB_IS_LOCAL
+
 if (session_status() === PHP_SESSION_NONE) {
     // Hardened session cookie: not readable by JavaScript, Lax same-site.
     session_set_cookie_params([
@@ -14,15 +16,16 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-function require_login(string $baseUrl = '/FoodBridge'): void
+function require_login(?string $baseUrl = null): void
 {
+    $baseUrl ??= BASE_URL;
     if (empty($_SESSION['user_id'])) {
         header('Location: ' . $baseUrl . '/auth/login.php');
         exit;
     }
 }
 
-function require_role(string $role, string $baseUrl = '/FoodBridge'): void
+function require_role(string $role, ?string $baseUrl = null): void
 {
     require_login($baseUrl);
     if (($_SESSION['role'] ?? null) !== $role) {
@@ -32,8 +35,9 @@ function require_role(string $role, string $baseUrl = '/FoodBridge'): void
 }
 
 // Where each role lands after login.
-function dashboard_url(string $role, string $baseUrl = '/FoodBridge'): string
+function dashboard_url(string $role, ?string $baseUrl = null): string
 {
+    $baseUrl ??= BASE_URL;
     return match ($role) {
         'admin'    => $baseUrl . '/admin/dashboard.php',
         'donor'    => $baseUrl . '/donor/dashboard.php',
@@ -42,7 +46,7 @@ function dashboard_url(string $role, string $baseUrl = '/FoodBridge'): string
     };
 }
 
-function redirect_to_dashboard(string $baseUrl = '/FoodBridge'): void
+function redirect_to_dashboard(?string $baseUrl = null): void
 {
     header('Location: ' . dashboard_url($_SESSION['role'] ?? '', $baseUrl));
     exit;

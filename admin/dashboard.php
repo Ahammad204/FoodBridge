@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role('admin');
 
-$baseUrl = '/FoodBridge';
+$baseUrl = BASE_URL;
 
 $count = fn(string $sql): int => (int) $pdo->query($sql)->fetchColumn();
 

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role('receiver');
 
-$baseUrl = '/FoodBridge';
+$baseUrl = BASE_URL;
 
 $categories = ['Cooked Food', 'Bakery', 'Raw Food', 'Fruits & Vegetables', 'Packaged Food', 'Beverages', 'Other'];
 

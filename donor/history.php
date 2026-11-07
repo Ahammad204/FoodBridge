@@ -7,7 +7,7 @@ require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../includes/notify.php';
 require_role('donor');
 
-$baseUrl = '/FoodBridge';
+$baseUrl = BASE_URL;
 $donorId = (int) $_SESSION['user_id'];
 
 // ---- Mark as Completed (donation must be mine and currently 'requested') ----
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'compl
                     (int) $info['receiver_id'],
                     'request_completed',
                     'Your pickup of "' . $info['title'] . '" was marked as completed. Thank you!',
-                    '/FoodBridge/receiver/history.php'
+                    '/receiver/history.php'
                 );
             }
 

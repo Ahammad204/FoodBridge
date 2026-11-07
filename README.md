@@ -20,6 +20,17 @@ so surplus food reaches people who need it instead of going to waste.
 Database connection settings live in `config/db.php`
 (XAMPP defaults: host `localhost`, user `root`, empty password, database `foodbridge`).
 
+## Running at a domain root (hosting)
+
+The app auto-detects where it runs (`config/app.php`): on localhost it uses
+the `/FoodBridge` base path (XAMPP subfolder); on any real domain `BASE_URL`
+is empty, so the same code works from `htdocs` at the domain root.
+
+On a real host, `config/db.php` loads database credentials from
+`config/config.production.php` instead of the XAMPP defaults. That file is
+**git-ignored** (see `.gitignore`): copy it from the deploy zip, set the real
+MySQL password in place of `YOUR_PASSWORD_HERE`, and upload it with the site.
+
 ## Updating an existing install
 
 If you imported an older `database.sql` before notifications existed, run

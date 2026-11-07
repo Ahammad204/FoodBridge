@@ -1,5 +1,7 @@
 <?php
 // FoodBridge — logout
+require_once __DIR__ . '/../config/app.php'; // BASE_URL
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -19,5 +21,5 @@ session_destroy();
 session_start();
 $_SESSION['flash'] = ['type' => 'success', 'message' => 'You have been logged out.'];
 
-header('Location: /FoodBridge/auth/login.php');
+header('Location: ' . BASE_URL . '/auth/login.php');
 exit;

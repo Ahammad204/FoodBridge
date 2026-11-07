@@ -1,8 +1,9 @@
 <?php
 // FoodBridge — about page
 $pageTitle = 'About';
+require_once __DIR__ . '/config/app.php'; // BASE_URL
+$baseUrl = BASE_URL;
 include __DIR__ . '/includes/header.php';
-$baseUrl = '/FoodBridge';
 ?>
 
 <section class="fb-hero p-4 p-md-5 mb-5">

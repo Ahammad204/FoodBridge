@@ -1,6 +1,6 @@
 <?php
 // FoodBridge — responsive navbar; links change by login state and role.
-$baseUrl    = $baseUrl ?? '/FoodBridge';
+$baseUrl    = $baseUrl ?? BASE_URL;
 $isLoggedIn = !empty($_SESSION['user_id']);
 $role       = $_SESSION['role'] ?? null;
 $userName   = $_SESSION['name'] ?? '';

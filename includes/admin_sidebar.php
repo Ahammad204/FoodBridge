@@ -2,7 +2,7 @@
 // FoodBridge — admin sidebar. Set $adminPage before including
 // ('dashboard', 'users', 'verify', 'donations', 'requests', 'reports').
 // Expects $pdo (for the pending-verification badge) and $baseUrl.
-$baseUrl   = $baseUrl ?? '/FoodBridge';
+$baseUrl   = $baseUrl ?? BASE_URL;
 $adminPage = $adminPage ?? '';
 
 $pendingVerify = 0;

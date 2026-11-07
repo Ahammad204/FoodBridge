@@ -2,9 +2,9 @@
 // FoodBridge — public home page
 $pageTitle = 'Home';
 require_once __DIR__ . '/config/db.php';
+$baseUrl = BASE_URL;
 include __DIR__ . '/includes/header.php';
 
-$baseUrl = '/FoodBridge';
 $isLoggedIn = !empty($_SESSION['user_id']);
 $role = $_SESSION['role'] ?? null;
 

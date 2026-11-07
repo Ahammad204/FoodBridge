@@ -6,7 +6,7 @@ require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/includes/auth_check.php';
 require_login();
 
-$baseUrl = '/FoodBridge';
+$baseUrl = BASE_URL;
 $userId = (int) $_SESSION['user_id'];
 
 // Open one notification: mark read, then go to its target page.
@@ -20,8 +20,14 @@ if (isset($_GET['go'])) {
         ->execute([$id, $userId]);
 
     $link = $row['link'] ?? null;
+    // Stored links are app-relative ('/donor/requests.php'). Older rows may
+    // still carry the legacy '/FoodBridge' prefix — strip it, then rebuild
+    // the URL from BASE_URL so it works at a domain root and on XAMPP.
     if (is_string($link) && str_starts_with($link, '/FoodBridge/')) {
-        header('Location: ' . $link);
+        $link = substr($link, strlen('/FoodBridge'));
+    }
+    if (is_string($link) && str_starts_with($link, '/') && !str_starts_with($link, '//')) {
+        header('Location: ' . $baseUrl . $link);
     } else {
         header('Location: ' . $baseUrl . '/notifications.php');
     }

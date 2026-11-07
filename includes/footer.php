@@ -9,10 +9,10 @@
             <div class="col-md-4">
                 <h6>Quick links</h6>
                 <ul class="list-unstyled small mb-0">
-                    <li><a href="<?= $baseUrl ?? '/FoodBridge' ?>/index.php">Home</a></li>
-                    <li><a href="<?= $baseUrl ?? '/FoodBridge' ?>/about.php">About us</a></li>
-                    <li><a href="<?= $baseUrl ?? '/FoodBridge' ?>/contact.php">Contact</a></li>
-                    <li><a href="<?= $baseUrl ?? '/FoodBridge' ?>/auth/register.php">Become a donor</a></li>
+                    <li><a href="<?= $baseUrl ?? BASE_URL ?>/index.php">Home</a></li>
+                    <li><a href="<?= $baseUrl ?? BASE_URL ?>/about.php">About us</a></li>
+                    <li><a href="<?= $baseUrl ?? BASE_URL ?>/contact.php">Contact</a></li>
+                    <li><a href="<?= $baseUrl ?? BASE_URL ?>/auth/register.php">Become a donor</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
@@ -28,6 +28,6 @@
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="<?= $baseUrl ?? '/FoodBridge' ?>/assets/js/app.js"></script>
+<script src="<?= $baseUrl ?? BASE_URL ?>/assets/js/app.js"></script>
 </body>
 </html>

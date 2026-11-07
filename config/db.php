@@ -1,12 +1,34 @@
 <?php
 // FoodBridge — database connection (PDO)
-// XAMPP defaults: host=localhost, user=root, password='' (empty)
+//
+// Local XAMPP uses the defaults below (host=localhost, user=root, empty
+// password). On any real host, credentials come from
+// config/config.production.php instead (kept out of Git — see .gitignore).
 
-$host    = 'localhost';
-$dbname  = 'foodbridge';
-$user    = 'root';
-$pass    = '';
-$charset = 'utf8mb4';
+require_once __DIR__ . '/app.php'; // defines BASE_URL + FB_IS_LOCAL
+
+if (FB_IS_LOCAL) {
+    $host    = 'localhost';
+    $dbname  = 'foodbridge';
+    $user    = 'root';
+    $pass    = '';
+    $charset = 'utf8mb4';
+} else {
+    $prodConfigFile = __DIR__ . '/config.production.php';
+    if (!is_file($prodConfigFile)) {
+        die('Missing config/config.production.php — production database credentials are not set up.');
+    }
+    $prod = require $prodConfigFile;
+    if (!is_array($prod)) {
+        die('config/config.production.php must return an array of database credentials.');
+    }
+    $host    = (string) ($prod['host'] ?? '');
+    $dbname  = (string) ($prod['dbname'] ?? '');
+    $user    = (string) ($prod['user'] ?? '');
+    $pass    = (string) ($prod['pass'] ?? '');
+    $charset = (string) ($prod['charset'] ?? 'utf8mb4');
+    unset($prod, $prodConfigFile);
+}
 
 $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
 

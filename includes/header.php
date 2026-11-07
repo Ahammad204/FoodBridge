@@ -1,5 +1,6 @@
 <?php
 // FoodBridge — page header. Set $pageTitle before including.
+require_once __DIR__ . '/../config/app.php'; // defines BASE_URL + FB_IS_LOCAL
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'httponly' => true,
@@ -8,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 $pageTitle = $pageTitle ?? 'FoodBridge';
-$baseUrl   = $baseUrl   ?? '/FoodBridge';
+$baseUrl   = $baseUrl   ?? BASE_URL;
 ?>
 <!DOCTYPE html>
 <html lang="en">

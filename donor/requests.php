@@ -7,7 +7,7 @@ require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../includes/notify.php';
 require_role('donor');
 
-$baseUrl = '/FoodBridge';
+$baseUrl = BASE_URL;
 $donorId = (int) $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (int) $request['receiver_id'],
             'request_rejected',
             'Your request for "' . $request['donation_title'] . '" was rejected by the donor.',
-            '/FoodBridge/receiver/my_requests.php'
+            '/receiver/my_requests.php'
         );
 
         flash_set('success', 'Request rejected.');
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (int) $request['receiver_id'],
                 'request_accepted',
                 'Your request for "' . $request['donation_title'] . '" was accepted. Please arrange the pickup.',
-                '/FoodBridge/receiver/my_requests.php'
+                '/receiver/my_requests.php'
             );
             foreach ($otherReceiverIds as $otherId) {
                 notify_user(
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     (int) $otherId,
                     'request_rejected',
                     'Your request for "' . $request['donation_title'] . '" was rejected — the donor accepted another request.',
-                    '/FoodBridge/receiver/my_requests.php'
+                    '/receiver/my_requests.php'
                 );
             }
 
